@@ -14,6 +14,7 @@ if __name__ == '__main__':
     vertexes = {}
     count = 0
 
+    # Part 1
     for claim in claims:
         for i in range(0, claim[2][0]):
             for j in range(0, claim[2][1]):
@@ -28,6 +29,7 @@ if __name__ == '__main__':
 
     print(f'number of overlaps: {count}')   
 
+    #  Part 2
     for claim in claims:
         overlap = check_overlap(claim, vertexes)
         if not overlap:
