@@ -16,29 +16,29 @@ if __name__ == '__main__':
     f = open('assets/07.txt', 'r')
     
     #  Part 1
-    # input_deps = [(x[5], x[36]) for x in f]
+    input_deps = [(x[5], x[36]) for x in f]
 
 
-    # deps = defaultdict(list)
-    # nodes = []
-    # for input_dep in input_deps:
-    #     deps[input_dep[1]].append(input_dep[0])
-    #     if input_dep[1] not in nodes:
-    #         nodes.append(input_dep[1])
-    #     if input_dep[0] not in nodes:
-    #         nodes.append(input_dep[0])
+    deps = defaultdict(list)
+    nodes = []
+    for input_dep in input_deps:
+        deps[input_dep[1]].append(input_dep[0])
+        if input_dep[1] not in nodes:
+            nodes.append(input_dep[1])
+        if input_dep[0] not in nodes:
+            nodes.append(input_dep[0])
 
-    # nodes = sorted(nodes)
+    nodes = sorted(nodes)
 
-    # sol = ""
-    # while(len(nodes)) > 0:
-    #     for node in nodes:
-    #         if not any(dep in nodes for dep in deps[node]):
-    #             sol = sol + node
-    #             nodes.remove(node)
-    #             break
+    sol = ""
+    while(len(nodes)) > 0:
+        for node in nodes:
+            if not any(dep in nodes for dep in deps[node]):
+                sol = sol + node
+                nodes.remove(node)
+                break
 
-    # print(sol)
+    print(sol)
 
     #  Part 2
 

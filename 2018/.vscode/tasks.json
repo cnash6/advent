@@ -1,0 +1,7 @@
+{
+    "command": "python",
+    "args": [
+        "p08.py"
+    ],
+    "problemMatchers": [],
+}
