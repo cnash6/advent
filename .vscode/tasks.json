@@ -1,7 +1,7 @@
 {
     "command": "python",
     "args": [
-        "2018/p09.py"
+        "2018/p10.py"
     ],
     "problemMatchers": [],
 }
