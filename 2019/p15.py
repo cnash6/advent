@@ -117,7 +117,8 @@ curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_BLACK) # floor
 curses.init_pair(3, curses.COLOR_RED, curses.COLOR_RED) # wall
 curses.init_pair(4, curses.COLOR_BLUE, curses.COLOR_BLACK) # bot 
 curses.init_pair(5, curses.COLOR_GREEN, curses.COLOR_BLACK) # target
-ccolors = {0: curses.color_pair(3), 1: curses.color_pair(2), 2: curses.color_pair(5), -1: curses.color_pair(1)}
+curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLUE) # filled
+ccolors = {0: curses.color_pair(3), 1: curses.color_pair(2), 2: curses.color_pair(5), -1: curses.color_pair(1), 9: curses.color_pair(6)}
 
 robot = Robot(intcode[:])
 maze = {}
@@ -164,8 +165,24 @@ while True:
 
     # print_maze(stdscr)
 
+
+# Part 2
+
+def fill_room(curr_x, curr_y, distance):
+    maze[(curr_x,curr_y)]['block'] = 9
+    print_maze(stdscr)
+
+    dists = []
+    for child_loc in [(curr_x+1,curr_y), (curr_x-1,curr_y), (curr_x,curr_y+1), (curr_x,curr_y-1)]:
+
+        child = maze.get(child_loc, None)
+        if child and child['block'] == 1:
+            dists.append(fill_room(child_loc[0], child_loc[1], distance+1))
+    return max([distance] + dists)
+
 curses.nocbreak()
 curses.echo()
 curses.endwin()
 
 print(found)
+print(fill_room(found[0][0], found[0][1], 0))
