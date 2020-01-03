@@ -14,6 +14,7 @@ class Computer:
         self.i = 0
         self.out_log = []
         self.relative_base = 0
+        self.waiting_input = False
         self.debug = False
         
     def print_debug(self, text):
@@ -48,7 +49,9 @@ class Computer:
     
     def val_in(self, modes):
         if not self.inputs:
+            self.waiting_input = True
             return True
+        self.waiting_input = False
         x = self.inputs.pop(0)
         self.write_value(self.i+1, modes.get(0, 0), x)
         self.i+=2
