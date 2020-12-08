@@ -18,7 +18,8 @@ def expenses(input_file, n):
     #   cast 'x' as an int
     expenses = [int(x) for x in f] 
 
-    # for each combination on n expenses in the list of expenses (itertools rocks)
+    # for each combination of n expenses in the list of expenses (itertools rocks)
+    # e.g. combinations([1,2,3], 2) => [(1,2), (2,3), (1,3)]
     for combination in combinations(expenses, n):
         # if the sum of the numbers in that combination == 2020
         if sum(combination) == 2020:
@@ -31,7 +32,11 @@ def expenses(input_file, n):
             #   lambdas:
             #       lambdas are python's (relatively gross) way of implementing
             #       small, one-off functions that don't deserve to have their own 
-            #       name. e,g, "lambda params: do something with params"   
+            #       name. e,g, "lambda params: do something with params"  
+            # 
+            # Returning here allows us to "short circuit" and return once we find 
+            # a solution and not check all the combinations. This becomes very useful
+            # once the problems get harder
             return reduce(lambda x, y: x * y, list(combination))
 
 # Part One
