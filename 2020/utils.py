@@ -1,3 +1,5 @@
+import time
+
 def check_progress(i, n):
     if i % (n//100) == 0:
         print("..." + str(i // (n//100)) + "%", end="\r")
@@ -7,3 +9,9 @@ def aocin(fname):
 
 def togrid(inputs):
     return [[y for y in x.strip()] for x in inputs]
+
+def start_time():
+        return time.time()
+
+def end_time(s):
+        print("--- %s seconds ---" % (time.time() - s))
