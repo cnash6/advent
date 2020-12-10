@@ -10,7 +10,10 @@ def part_one(inputs, n):
             return nums[i]
 
 def part_two(inputs, n):
+    s = start_time()
     target = part_one(inputs, n)
+    end_time(s)
+    print(target)
     nums = [int(x) for x in inputs]
 
     for i in range(len(nums)):
@@ -23,12 +26,12 @@ def part_two(inputs, n):
             if acc > target:
                 break
 
-s = start_time()
+ss = start_time()
 # Part One 
 # print(part_one(aocin('inputs/09.1'), 5))
-print(part_one(aocin('inputs/09'), 25))
+# print(part_one(aocin('inputs/09'), 25))
 
 # # Part Two 
 # print(part_two(aocin('inputs/09.1'), 5))
 print(part_two(aocin('inputs/09'), 25))
-end_time(s)
+end_time(ss)
