@@ -2,6 +2,7 @@
 
 from utils import *
 from collections import defaultdict
+from functools import lru_cache
 
 def part_one(inputs):
     MAX_DIFF = 3
@@ -16,24 +17,30 @@ def part_one(inputs):
 
     return diffs[1] * diffs[3]
 
-def build_chain(curr, memo, adapters):
-    if curr in memo:
-        return memo[curr], memo
-    if not any([x in adapters for x in range(curr+1, curr+4)]):
-        return 1, memo
+# OLD AND GROSS
+# def build_chain(curr, memo, adapters):
+#     if curr in memo:
+#         return memo[curr], memo
+#     if not any([x in adapters for x in range(curr+1, curr+4)]):
+#         return 1, memo
     
-    myval = 0
-    for i,x in enumerate(range(curr+1, curr+4)):
-        if x in adapters:
-            childres = build_chain(x, memo, [y for y in adapters if y > x])
-            myval+= childres[0]
-            memo = childres[1]
-    memo[curr] = myval
-    return myval, memo
+#     myval = 0
+#     for i,x in enumerate(range(curr+1, curr+4)):
+#         if x in adapters:
+#             childres = build_chain(x, memo, [y for y in adapters if y > x])
+#             myval+= childres[0]
+#             memo = childres[1]
+#     memo[curr] = myval
+#     return myval, memo
+
+@lru_cache
+def build_chain(curr, adapters):
+    children = [build_chain(x, adapters) for x in range(curr+1, curr+4) if x in adapters]
+    return sum(children) if children else 1
 
 def part_two(inputs):
     adapters = sorted([int(x) for x in inputs])
-    return build_chain(0, {}, adapters)[0]
+    return build_chain(0, tuple(adapters))
 
 ss = start_time()
 # Part One 
