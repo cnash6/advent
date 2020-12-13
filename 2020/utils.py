@@ -15,3 +15,6 @@ def start_time():
 
 def end_time(s):
         print("--- %s seconds ---" % (time.time() - s))
+
+def manhattan(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

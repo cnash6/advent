@@ -6,16 +6,14 @@ from copy import deepcopy
 
 def tick_seats(seats, nieghborfn, numneighbors):
     newseats = deepcopy(seats)
-    changed = False
     for j in range(len(seats)):
         for i,seat in enumerate(seats[j]):   
             occupied_neighbors = nieghborfn(i, j, seats)
             if seat == 'L' and not occupied_neighbors:
                 newseats[j][i] = '#'
-                changed = True
             elif seat == '#' and len(occupied_neighbors) >= numneighbors:
                 newseats[j][i] = 'L'
-                changed = True
+    changed = ''.join([''.join(x) for x in seats]) != ''.join([''.join(x) for x in newseats])
     return changed, newseats
 
 def intersect_seat(x, y, dx, dy, seats):
@@ -38,16 +36,14 @@ def part_two(inputs):
         if not changed:
             return len([y for y in ''.join([''.join(x) for x in seats]) if y == '#'])
 
-
-
 s = start_time()
 # Part One 
-print(part_one(aocin('inputs/11.1')))
+# print(part_one(aocin('inputs/11.1')))
 print(part_one(aocin('inputs/11')))
 end_time(s)
 
 s = start_time()
 # Part One 
-print(part_two(aocin('inputs/11.1')))
+# print(part_two(aocin('inputs/11.1')))
 print(part_two(aocin('inputs/11')))
 end_time(s)
