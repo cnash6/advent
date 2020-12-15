@@ -3,20 +3,14 @@
 from utils import *
 
 def doit(inputs, n):
-    nums = inputs.split(',')
-    numd = {0: (0,0)} | {int(x): (i+1, 0) for i,x in enumerate(nums)}
-    i,last = len(nums)+1, int(nums[-1])
+    nums = [int(x) for x in inputs.split(',')]
+    numd = {0: (0,0)} | {x: (i+1, 0) for i,x in enumerate(nums)}
+    last = nums[-1]
 
-    while i <= n:
-        if numd[last][1] == 0: # last time was the first time
-            numd[0] = (i,) + (numd[0][0],)
-            last = 0
-        else:
-            lastSaid = numd[last]
-            say = lastSaid[0]-lastSaid[1]
-            numd[say] = (i,) + (numd[say][0],) if say in numd else (i,0)
-            last = say
-        i+=1
+    for i in range(len(nums)+1, n+1):
+        say = numd[last][0]-numd[last][1] if numd[last][1] != 0 else 0
+        numd[say] = (i,) + (numd[say][0],) if say in numd else (i,0)
+        last = say
 
     return last
 
