@@ -8,9 +8,12 @@ edgefns = {
     'left_edge': lambda t: [y[0] for y in t],
     'right_edge': lambda t: [y[-1] for y in t]
 }
-rotate_clockwise = lambda x: list(zip(*x[::-1]))
+rotate_clockwise = lambda x: [list(y) for y in list(zip(*x[::-1]))]
 flipx = lambda y: [x[::-1] for x in y]
 flipy = lambda t: t[::-1]
+
+def minmax(tiles,i): 
+    return min(tiles.values(), key=lambda x: x['coords'][i])['coords'][i], max(tiles.values(), key=lambda x: x['coords'][i])['coords'][i] 
 
 def fit_tiles(tile1, tile2):
     # top
@@ -51,13 +54,12 @@ def fit_tiles(tile1, tile2):
             return flipy(tile2),(-1,0)
     return None,None
 
-
 def part_one(inputs):
     tiles = {x[0][5:-1]:{'tile': [[i for i in j] for j in x[1].split('\n')], 'fits': []}  for x in [y.split('\n',1) for y in inputs.split('\n\n')]}
     unplaced = [tile for tile in tiles]
     starting_tile_id = unplaced[0]
-    tiles[starting_tile_id]['tile'] = tiles[starting_tile_id]['tile'][::-1]
     del unplaced[0]
+    tiles[starting_tile_id]['tile'] = tiles[starting_tile_id]['tile'][::-1]
     tiles[starting_tile_id]['coords'] = (0,0)
     i=0
     while unplaced and i < 1000*len(unplaced):
@@ -71,22 +73,9 @@ def part_one(inputs):
                 i-=1
                 break
         i+=1
-    
 
-    minx,maxx = min(tiles.values(), key=lambda x: x['coords'][0])['coords'][0], max(tiles.values(), key=lambda x: x['coords'][0])['coords'][0]
-    miny,maxy = min(tiles.values(), key=lambda x: x['coords'][1])['coords'][1], max(tiles.values(), key=lambda x: x['coords'][1])['coords'][1]
-
-    for y in range(miny, maxy+1):
-        for x in range(minx, maxx+1):
-            found = [k  for k,v in tiles.items() if v['coords'] == (x,y)]
-            print(found[0]+'\t' if found else '\t', end='')
-        print()
-    # for key,tile in tiles.items():
-    #     print(key)
-    #     for line in tile['tile']:
-    #         print(''.join(line))
-    #     print()
-
+    minx,maxx = minmax(tiles, 0)
+    miny,maxy = minmax(tiles, 1)
     return (
         int([k  for k,v in tiles.items() if v['coords'] == (minx,miny)][0]) *
         int([k  for k,v in tiles.items() if v['coords'] == (minx,maxy)][0]) *
@@ -94,32 +83,50 @@ def part_one(inputs):
         int([k  for k,v in tiles.items() if v['coords'] == (maxx,maxy)][0])
     , tiles)
 
+def monster_hunter(img, monster):
+    monster_length = max(monster, key=lambda m: m[0])[0]
+    monster_height = max(monster, key=lambda m: m[1])[1]
+    for j in range(len(img)-monster_height):
+        for i in range(len(img[j])-monster_length):
+            if all([img[j+m[1]][i+m[0]] in ['#', 'O'] for m in monster]):
+                for b,a in [(j+m[1],i+m[0]) for m in monster]:
+                    img[b][a] = 'O'
+    return img
+
 def part_two(inputs):
-    res = part_one(inputs)
-    return res[1]
-
-
-
-    # for tile in tiles:
-    #     for test in [x for x in tiles if x != tile]:
-    #         fits = fit_tiles(tiles[tile]['tile'], tiles[test]['tile'])
-    #         if fits:
-    #             tiles[test]['tile'] = fits[0]
-    #             # tiles[tile]['fits'].append([f'tile {tile} {fit[0]} fits tile {test} {fit[1]}' for fit in fits])
-    #             print(f'tile {tile} fits tile {test} at {fits[1]}')
-
-    # for tile in tiles:
-    #     print(tile)
-    #     print('\t', tiles[tile]['fits'])
-    # # return tiles
-
-
-# s = start_time()
-# print(part_one(open('inputs/20.1', 'r').read())[0]) 
-# # print(part_one(open('inputs/20', 'r').read())[0]) 
-# end_time(s)
+    tiles = part_one(inputs)[1]
+    minx,maxx = minmax(tiles,0)
+    miny,maxy = minmax(tiles,1)
+    img = []
+    for j in range(miny, maxy+1):
+        tys = [y['tile'] for y in sorted([tile for tile in tiles.values() if tile['coords'][1] == j], key=lambda x: x['coords'][0])]
+        for y in range(1,len(tys[0])-1):
+            img.append(''.join([''.join(t[y][1:-1]) for t in tys]))
+# MONSTER
+                  # 
+#    ##    ##    ###
+ #  #  #  #  #  #    
+    monster_in = open('inputs/20.2', 'r').readlines()
+    monster = []
+    for y in range(len(monster_in)):
+        for x in range(len(monster_in[y])):
+            if monster_in[y][x] == '#':
+                monster += [(x,y)]
+    
+    for _ in range(4):
+        img = monster_hunter(img, monster)
+        img = flipx(img)
+        img = monster_hunter(img, monster)
+        img = flipx(img)
+        img = rotate_clockwise(img)
+    return sum(1 for y in ''.join([''.join(x) for x in img]) if y == '#')
 
 s = start_time()
-print(part_two(open('inputs/20.1', 'r').read())) 
-# print(part_one(open('inputs/20', 'r').read())) 
+# print(part_one(open('inputs/20.1', 'r').read())[0]) 
+print(part_one(open('inputs/20', 'r').read())[0])
+end_time(s)
+
+s = start_time()
+# print(part_two(open('inputs/20.1', 'r').read())) 
+print(part_two(open('inputs/20', 'r').read())) 
 end_time(s)
