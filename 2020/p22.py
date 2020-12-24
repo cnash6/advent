@@ -22,7 +22,7 @@ def endless_war(p1,p2):
             return p1,[]
         rounds[(f1,f2)] = True
         c1,c2 = p1.popleft(), p2.popleft()
-        res = endless_war(deque(list(p1)[:c1]), deque(list(p2)[:c2])) if len(p1) >= c1 and len(p2) >= c2 else (([c1,c2],[]) if c1>c2 else ([],[c2,c1]))
+        res = endless_war(deque(list(p1)[:c1]), deque(list(p2)[:c2])) if len(p1) >= c1 and len(p2) >= c2 else (c1>c2,) 
         if res[0]:
             p1.extend([c1,c2])
         else:
@@ -39,7 +39,7 @@ def part_two(inputs):
 s = start_time()
 # # print(part_one(open('inputs/22.1', 'r').read()))
 print(part_one(open('inputs/22', 'r').read())) # 35818
-end_time(s)
+# end_time(s)
 
 s = start_time()
 # print(part_two(open('inputs/22.2', 'r').read()))
