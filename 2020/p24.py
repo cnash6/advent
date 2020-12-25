@@ -25,7 +25,7 @@ def do_it(inputs, fliprule):
             tile = (tile[0]+move[0],tile[1]+move[1])
         tiles[tile] = fliprule(tile,tiles)
     return tiles
-    
+
 fliprule = lambda tile,tiles: not tiles[tile] if tile in tiles else True
 
 def part_one(inputs):
@@ -43,7 +43,6 @@ def part_two(inputs, n):
         miny,maxy = min(tiles.keys(), key=lambda x: x[1])[1], max(tiles.keys(), key=lambda x: x[1])[1] 
         tiles = {y: p2rule(y,tiles) for y in [x for x in product(range(minx-2,maxx+2),range(miny-2,maxy+2))]}
     return len([x for x in tiles.values() if x])
-
 
 s = start_time()
 # print(part_one(aocin('inputs/24.1')))
