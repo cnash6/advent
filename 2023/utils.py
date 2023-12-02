@@ -4,7 +4,7 @@ def check_progress(i, n):
     if i % (n//100) == 0:
         print("..." + str(i // (n//100)) + "%", end="\r")
 
-def aocin(fname):
+def aocin(fname) -> list[str]:
     with open(fname, 'r') as f:
         return [x.strip() for x in f.readlines()]
 
