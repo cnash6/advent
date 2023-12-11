@@ -9,7 +9,7 @@ def do_it(inputs: list[str]):
         winners, card = numbers.split(" | ")
         winners = winners.split(": ")[1].split()
         card = card.split()
-        
+
         card_winners = len(set([x for x in card if x in winners]))
 
         part1 += (2**(card_winners-1) if card_winners else 0)
@@ -22,7 +22,4 @@ def do_it(inputs: list[str]):
 
 print(do_it(aocin("inputs/04.1")))
 print(do_it(aocin("inputs/04")))
-
-
-
 
